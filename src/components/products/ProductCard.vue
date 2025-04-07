@@ -22,7 +22,7 @@ const props = defineProps({
 .product-card {
   border-bottom: 1px solid #ccc;
   background-color: var(--color-background-soft);
-  width: 200px;
+  width: 150px;
 }
 
 .product-image {

@@ -1,10 +1,10 @@
 <script setup>
-import ProductListings from './components/ProductListings.vue'
+import ProductListings from './components/products/ProductListings.vue'
 import ThemeChanger from './utils/ThemeChanger.vue'
 </script>
 <template>
-  <ThemeChanger />
   <ProductListings />
+  <ThemeChanger />
 </template>
 
 <style scoped></style>

@@ -1,7 +1,7 @@
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
   --vt-c-white: #ffffff;
-  --vt-c-white-soft: #f8f8f8;
+  --vt-c-white-soft: #f0f3f5;
   --vt-c-white-mute: #f2f2f2;
 
   --vt-c-black: #181818;
@@ -15,6 +15,15 @@
   --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
   --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
 
+  /* placeholder colors */
+  --vt-c-placeholder-light-1: #aaa;
+  --vt-c-placeholder-light-2: rgba(60, 60, 60, 0.12);
+  --vt-c-input-background: #f0f3f5;
+  --vt-c-input-background-dark: #282828;
+
+  --vt-c-placeholder-dark-1: rgba(84, 84, 84, 0.65);
+  --vt-c-placeholder-dark-2: rgba(84, 84, 84, 0.48);
+
   --vt-c-text-light-1: var(--vt-c-indigo);
   --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
   --vt-c-text-dark-1: var(--vt-c-white);
@@ -26,6 +35,11 @@
   --color-background: var(--vt-c-white);
   --color-background-soft: var(--vt-c-white-soft);
   --color-background-mute: var(--vt-c-white-mute);
+
+  --color-placeholder: var(--vt-c-placeholder-light-1);
+  --color-background-input: var(--vt-c-input-background);
+
+  --color-placeholder-dark: var(--vt-c-placeholder-dark-1);
 
   --color-border: var(--vt-c-divider-light-2);
   --color-border-hover: var(--vt-c-divider-light-1);
@@ -42,6 +56,10 @@
   --color-background-soft: var(--vt-c-black-soft);
   --color-background-mute: var(--vt-c-black-mute);
   --color-border: var(--vt-c-divider-dark-2);
+  --color-border-hover: var(--vt-c-divider-dark-1);
+  --color-placeholder: var(--vt-c-placeholder-dark-1);
+  --color-background-input: var(--vt-c-input-background-dark);
+  --color-placeholder-dark: var(--vt-c-placeholder-dark-2);
 }
 
 *,
