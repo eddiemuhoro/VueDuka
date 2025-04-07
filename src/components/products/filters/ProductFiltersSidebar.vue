@@ -22,10 +22,6 @@ const props = defineProps({
 </template>
 
 <style scoped>
-.product-filters {
-  margin-bottom: 20px;
-}
-
 .filters-title {
   font-size: 1.5rem;
   margin-bottom: 10px;

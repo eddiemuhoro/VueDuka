@@ -43,9 +43,11 @@
 
   --color-border: var(--vt-c-divider-light-2);
   --color-border-hover: var(--vt-c-divider-light-1);
+  --color-divider: var(--vt-c-divider-light-1);
 
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--vt-c-text-light-1);
+  --color-text-special: var(--vt-c-white-soft);
 
   --section-gap: 160px;
 }
@@ -53,6 +55,7 @@
 [data-theme='dark'] {
   --color-background: var(--vt-c-black);
   --color-text: var(--vt-c-white-soft);
+  --color-text-special: var(--vt-c-text-light-1);
   --color-background-soft: var(--vt-c-black-soft);
   --color-background-mute: var(--vt-c-black-mute);
   --color-border: var(--vt-c-divider-dark-2);
@@ -60,6 +63,7 @@
   --color-placeholder: var(--vt-c-placeholder-dark-1);
   --color-background-input: var(--vt-c-input-background-dark);
   --color-placeholder-dark: var(--vt-c-placeholder-dark-2);
+  --color-divider: var(--vt-c-divider-dark-1);
 }
 
 *,
