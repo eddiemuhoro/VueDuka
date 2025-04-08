@@ -18,17 +18,19 @@ const handleInputChange = (event) => {
       {{ category }}
     </button>
   </setion>
-  <input
-    @change="handleInputChange"
-    type="text"
-    placeholder="Search products..."
-    class="search-input"
-  />
+  <section class="search-bar">
+    <input
+      @change="handleInputChange"
+      type="text"
+      placeholder="Search products..."
+      class="search-input"
+    />
+    <i class="pi pi-bars"></i>
+  </section>
 </template>
 
 <style scoped>
 .product-filters {
-  margin-bottom: 20px;
   display: flex;
   overflow-x: auto;
   gap: 10px; /* Add spacing between buttons */
@@ -50,14 +52,16 @@ const handleInputChange = (event) => {
   background-color: var(--color-background);
   color: var(--color-text-hover);
 }
-.filter-button {
-  background-color: var(--color-background-soft);
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Add spacing between input and icon */
+  padding: 10px; /* Add padding for better spacing */
+}
+.search-bar i {
+  font-size: 20px;
   color: var(--color-text);
-  border: none;
-  padding: 10px 20px;
-  border-radius: 20px;
   cursor: pointer;
-  margin-right: 10px;
 }
 .filter-button:hover {
   background-color: var(--color-background);
@@ -65,10 +69,9 @@ const handleInputChange = (event) => {
 }
 .search-input {
   width: 100%;
-  padding: 10px;
+  padding: 7px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  margin-bottom: 20px;
   background-color: var(--vt-c-input-background);
 }
 .search-input::placeholder {
@@ -79,5 +82,11 @@ const handleInputChange = (event) => {
   border-color: var(--color-border);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   outline: none;
+}
+
+@media (min-width: 728px) {
+  .search-bar i {
+    display: none; /* Hide the icon on smaller screens */
+  }
 }
 </style>
