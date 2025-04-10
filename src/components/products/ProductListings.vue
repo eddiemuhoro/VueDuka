@@ -72,15 +72,27 @@ const filterProducts = (searchTerm) => {
     )
   }
 }
+
+const isSidebarVisible = ref(false)
+const toggleSidebar = () => {
+  isSidebarVisible.value = !isSidebarVisible.value
+}
+const closeSidebar = () => {
+  isSidebarVisible.value = false
+}
 </script>
 
 <template>
   <div class="product-listings">
-    <section class="product-filters">
-      <ProductFiltersSidebar :categories="uniqueCategories" />
+    <section :class="['product-filters', { show: isSidebarVisible }]">
+      <ProductFiltersSidebar :categories="uniqueCategories" @closeSidebar="closeSidebar" />
     </section>
     <section class="products">
-      <ProductFiltersTop :categories="uniqueCategories" :filterProducts="filterProducts" />
+      <ProductFiltersTop
+        :categories="uniqueCategories"
+        @filterProducts="filterProducts"
+        @toggleSidebar="toggleSidebar"
+      />
       <div class="product-grid">
         <ProductCard v-for="product in filteredProducts" :key="product.id" :product="product" />
       </div>
@@ -112,7 +124,21 @@ const filterProducts = (searchTerm) => {
 
 @media (max-width: 728px) {
   .product-filters {
-    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    width: 300px;
+    height: 100%;
+    background-color: var(--color-background);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+  }
+
+  .product-filters.show {
+    transform: translateY(0);
   }
   .products {
     width: 100%;

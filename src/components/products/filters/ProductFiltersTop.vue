@@ -5,7 +5,7 @@ const props = defineProps({
     required: true,
   },
 })
-const emit = defineEmits(['filterProducts'])
+const emit = defineEmits(['filterProducts', 'toggleSidebar'])
 const handleInputChange = (event) => {
   const searchTerm = event.target.value
   emit('filterProducts', searchTerm)
@@ -25,7 +25,7 @@ const handleInputChange = (event) => {
       placeholder="Search products..."
       class="search-input"
     />
-    <i class="pi pi-bars"></i>
+    <i class="pi pi-bars" @click="$emit('toggleSidebar')"></i>
   </section>
 </template>
 
@@ -62,6 +62,7 @@ const handleInputChange = (event) => {
   font-size: 20px;
   color: var(--color-text);
   cursor: pointer;
+  text-align: right;
 }
 .filter-button:hover {
   background-color: var(--color-background);
