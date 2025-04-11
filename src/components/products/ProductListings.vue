@@ -1,77 +1,51 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import ProductCard from './ProductCard.vue'
 import ProductFiltersSidebar from './filters/ProductFiltersSidebar.vue'
 import ProductFiltersTop from './filters/ProductFiltersTop.vue'
 
-const products = [
-  {
-    id: 1,
-    title: 'Product 1',
-    description: 'Description for Product 1',
-    category: 'Category 1',
-    price: 19.99,
-    image:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLC1WjjzNBURE0taQ2MihTKAvKSkqzNAQXBA&s',
-  },
-  {
-    id: 2,
-    title: 'Product 2',
-    description: 'Description for Product 2',
-    category: 'Category 2',
-    price: 29.99,
-    image: 'https://cdn.mafrservices.com/sys-master-root/h22/he8/26798560346142/120048_main.jpg',
-  },
-  {
-    id: 3,
-    title: 'Product 3',
-    description: 'Description for Product 3',
-    category: 'Category 3',
-    price: 39.99,
-    image:
-      'https://d16zmt6hgq1jhj.cloudfront.net/product/13049/Kifaru%20Match%20Box%20300%20Sticks.jpg',
-  },
-  {
-    id: 4,
-    title: 'Product 4',
-    description: 'Description for Product 4',
-    category: 'Category 4',
-    price: 49.99,
-    image: 'https://cdn.mafrservices.com/sys-master-root/h22/he8/26798560346142/120048_main.jpg',
-  },
-  {
-    id: 5,
-    title: 'Product 5',
-    description: 'Description for Product 5',
-    category: 'Category 5',
-    price: 59.99,
-    image: 'https://cdn.mafrservices.com/sys-master-root/h22/he8/26798560346142/120048_main.jpg',
-  },
-  {
-    id: 6,
-    title: 'Product 6',
-    description: 'Description for Product 6',
-    category: 'Category 6',
-    price: 69.99,
-    image: 'https://cdn.mafrservices.com/sys-master-root/h22/he8/26798560346142/120048_main.jpg',
-  },
-]
-const categories = products.map((product) => product.category)
-const uniqueCategories = ['All', ...new Set(categories)]
+const products = ref([])
+const filteredProducts = ref([])
+const uniqueCategories = ref([])
 
-const filteredProducts = ref(products)
+const currentPage = ref(1)
+const productsPerPage = ref(15)
+
+const fetchProducts = async () => {
+  try {
+    const response = await fetch('/products.json')
+    const data = await response.json()
+    products.value = data
+    filteredProducts.value = data
+    const categories = data.map((product) => product.category)
+    uniqueCategories.value = ['All', ...new Set(categories)]
+  } catch (error) {
+    console.error('Error fetching products:', error)
+  }
+}
+
 const filterProducts = (searchTerm) => {
   console.log('Filtering products with search term:', searchTerm)
   if (!searchTerm) {
     return filteredProducts.value
   } else {
-    filteredProducts.value = products.filter(
+    filteredProducts.value = products.value.filter(
       (product) =>
         product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.category.toLowerCase().includes(searchTerm.toLowerCase()),
     )
   }
 }
+
+const paginatedProducts = computed(() => {
+  const start = (currentPage.value - 1) * productsPerPage.value
+  const end = start + productsPerPage.value
+  return filteredProducts.value.slice(start, end)
+})
+
+const totalPages = computed(() => {
+  return Math.ceil(filteredProducts.value.length / productsPerPage.value)
+})
 
 const isSidebarVisible = ref(false)
 const toggleSidebar = () => {
@@ -80,6 +54,10 @@ const toggleSidebar = () => {
 const closeSidebar = () => {
   isSidebarVisible.value = false
 }
+
+onMounted(() => {
+  fetchProducts()
+})
 </script>
 
 <template>
@@ -94,13 +72,21 @@ const closeSidebar = () => {
         @toggleSidebar="toggleSidebar"
       />
       <div class="product-grid">
-        <ProductCard v-for="product in filteredProducts" :key="product.id" :product="product" />
+        <ProductCard v-for="product in paginatedProducts" :key="product.id" :product="product" />
+      </div>
+      <div class="pagination">
+        <button :disabled="currentPage === 1" @click="currentPage--">Previous</button>
+        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+        <button :disabled="currentPage === totalPages" @click="currentPage++">Next</button>
       </div>
     </section>
   </div>
 </template>
 
 <style scoped>
+.product-filters {
+  width: 15%;
+}
 .products {
   width: 80%;
 }
@@ -121,7 +107,30 @@ const closeSidebar = () => {
   justify-content: space-around;
   gap: 10px;
 }
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
 
+.pagination button {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.pagination button:disabled {
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-size: 1rem;
+}
 @media (max-width: 728px) {
   .product-filters {
     position: fixed;
