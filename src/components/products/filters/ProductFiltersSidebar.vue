@@ -15,7 +15,10 @@ const maxPrice = ref(maxLimit)
 // Ensure minPrice does not exceed maxPrice
 const handleMinPriceChange = () => {
   if (minPrice.value > maxPrice.value - 100) {
-    minPrice.value = maxPrice.value - 100 // Prevent overlap
+    minPrice.value = maxPrice.value - 100
+  }
+  if (minPrice.value < minLimit) {
+    minPrice.value = minLimit
   }
 }
 
@@ -23,6 +26,9 @@ const handleMinPriceChange = () => {
 const handleMaxPriceChange = () => {
   if (maxPrice.value < minPrice.value + 100) {
     maxPrice.value = minPrice.value + 100 // Prevent overlap
+  }
+  if (maxPrice.value > maxLimit) {
+    maxPrice.value = maxLimit
   }
 }
 </script>
@@ -42,6 +48,15 @@ const handleMaxPriceChange = () => {
       <p>Ksh {{ maxPrice }} Ksh</p>
     </div>
     <div class="dual-range-slider">
+      <div class="slider-track">
+        <div
+          class="slider-range"
+          :style="{
+            left: `${((minPrice - minLimit) / (maxLimit - minLimit)) * 100}%`,
+            right: `${100 - ((maxPrice - minLimit) / (maxLimit - minLimit)) * 100}%`,
+          }"
+        ></div>
+      </div>
       <input
         type="range"
         id="min-price"
@@ -82,7 +97,9 @@ const handleMaxPriceChange = () => {
 }
 
 .filter-options label {
-  font-size: 1.2rem;
+  font-size: 1rem;
+  color: var(--color-text);
+  font-weight: bold;
 }
 
 .filter-options select {
@@ -101,6 +118,25 @@ const handleMaxPriceChange = () => {
   position: relative;
   width: 100%;
   height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.slider-track {
+  position: absolute;
+  width: 100%;
+  height: 5px;
+  background: #ddd; /* Background track color */
+  border-radius: 5px;
+  z-index: 1;
+}
+
+.slider-range {
+  position: absolute;
+  height: 100%;
+  background: var(--color-primary, #2c3e50); /* Selected range color */
+  border-radius: 5px;
+  z-index: 2;
 }
 
 .dual-range-slider input[type='range'] {
@@ -108,7 +144,8 @@ const handleMaxPriceChange = () => {
   width: 100%;
   height: 5px;
   background: transparent;
-  pointer-events: auto; /* Allow interaction with the sliders */
+  pointer-events: none; /* Prevent overlapping sliders from interfering */
+  z-index: 3;
   -webkit-appearance: none;
 }
 
@@ -117,19 +154,26 @@ const handleMaxPriceChange = () => {
   -webkit-appearance: none;
   width: 20px;
   height: 20px;
-  background: var(--color-background);
+  background: var(--color-background, #fff); /* Thumb color */
+  border: 2px solid var(--color-primary, #2c3e50); /* Thumb border color */
   border-radius: 50%;
   cursor: pointer;
+  z-index: 4;
 }
 
 .dual-range-slider input[type='range']::-webkit-slider-runnable-track {
   height: 5px;
-  background: var(--color-border);
-  border-radius: 5px;
+  background: transparent;
 }
 
 .dual-range-slider input[type='range']:focus {
   outline: none; /* Remove focus outline */
-  box-shadow: 0 0 5px var(--color-border-hover); /* Add a focus effect */
+  box-shadow: 0 0 5px var(--color-primary, #2c3e50); /* Add a focus effect */
+}
+
+@media (min-width: 728px) {
+  .filter-options i {
+    display: none;
+  }
 }
 </style>
