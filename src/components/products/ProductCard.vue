@@ -10,7 +10,11 @@ const props = defineProps({
 
 <template>
   <div class="product-card">
-    <img :src="product.image" alt="Product Image" class="product-image" />
+    <img
+      :src="`https://picsum.photos/200/200?random=${product.id}`"
+      alt="Product Image"
+      class="product-image"
+    />
     <div class="product-details">
       <h2 class="product-title">{{ product.title }}</h2>
       <p class="product-price">Ksh{{ product.price.toFixed(2) }}</p>
