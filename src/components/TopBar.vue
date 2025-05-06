@@ -1,4 +1,8 @@
-<script setup></script>
+<script setup>
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+</script>
 
 <template>
   <div class="top-bar">
@@ -12,7 +16,9 @@
     <nav class="nav-bar">
       <ul class="nav-links">
         <li>
-          <a href="#"><i class="pi pi-shopping-cart"></i></a>
+          <RouterLink to="/cart">
+            <i class="pi pi-shopping-cart"></i>
+          </RouterLink>
         </li>
         <li>
           <a href="#"> <i class="pi pi-user"></i></a>
