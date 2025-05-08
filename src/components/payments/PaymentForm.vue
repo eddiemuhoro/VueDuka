@@ -11,6 +11,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { loadStripe } from '@stripe/stripe-js'
+const baseUrl = import.meta.env.VITE_API_BASE_URL
 
 const props = defineProps({
   items: {
@@ -24,19 +25,29 @@ const isProcessing = ref(false)
 const errorMessage = ref('')
 onMounted(async () => {
   // Fetch the publishable key from your backend
-  const configResponse = await fetch('http://localhost:5252/config')
+  const configResponse = await fetch(`${baseUrl}/config`)
   const { publishableKey } = await configResponse.json()
 
   stripe.value = await loadStripe(publishableKey)
 
   // Create PaymentIntent on the server
-  const paymentIntentResponse = await fetch('http://localhost:5252/create-payment-intent', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      items: props.items,
-    }),
-  })
+  const paymentIntentResponse = await fetch(
+    `${baseUrl}/create-payment-intent`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        items: props.items,
+      }),
+    },
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        items: props.items,
+      }),
+    },
+  )
   const { clientSecret } = await paymentIntentResponse.json()
 
   elements.value = stripe.value.elements({ clientSecret })
