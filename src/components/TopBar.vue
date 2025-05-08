@@ -1,4 +1,5 @@
 <script setup>
+import { RouterLink } from 'vue-router'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -10,9 +11,9 @@ const router = useRouter()
       <i class="pi pi-phone"></i>
       <p>+254 3475934</p>
     </div>
-    <div class="company-logo">
+    <RouterLink to="/" class="company-logo">
       <img src="../assets/logo.svg" alt="Logo" class="logo" />
-    </div>
+    </RouterLink>
     <nav class="nav-bar">
       <ul class="nav-links">
         <li>
