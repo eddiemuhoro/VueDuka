@@ -3,6 +3,12 @@ import { RouterLink } from 'vue-router'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
+
+//cart count from local storage
+const cartCount = () => {
+  const cart = JSON.parse(localStorage.getItem('cart')) || []
+  return cart.length
+}
 </script>
 
 <template>
@@ -19,6 +25,7 @@ const router = useRouter()
         <li>
           <RouterLink to="/cart">
             <i class="pi pi-shopping-cart"></i>
+            <span class="cart-count">{{ cartCount() }}</span>
           </RouterLink>
         </li>
         <li>
@@ -66,6 +73,7 @@ const router = useRouter()
 }
 .nav-links li {
   font-size: 14px;
+  position: relative;
 }
 
 .nav-links a {
@@ -93,5 +101,14 @@ const router = useRouter()
 .divider {
   border: 1px solid var(--color-divider);
   margin: 0;
+}
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  color: var(--color-text);
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
 }
 </style>
