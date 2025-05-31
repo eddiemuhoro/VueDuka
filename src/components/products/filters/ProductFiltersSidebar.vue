@@ -7,8 +7,8 @@ const props = defineProps({
   },
 })
 const emit = defineEmits(['closeSidebar'])
-const maxLimit = 23405
-const minLimit = 300
+const maxLimit = 400
+const minLimit = 0
 const minPrice = ref(minLimit)
 const maxPrice = ref(maxLimit)
 
@@ -162,7 +162,7 @@ const handleMaxPriceChange = () => {
 }
 
 .dual-range-slider input[type='range']::-webkit-slider-runnable-track {
-  height: 5px;
+  height: 20px;
   background: transparent;
 }
 
