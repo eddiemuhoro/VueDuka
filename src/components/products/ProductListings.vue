@@ -13,11 +13,12 @@ const productsPerPage = ref(15)
 
 const fetchProducts = async () => {
   try {
-    const response = await fetch('/products.json')
+    const response = await fetch('http://127.0.0.1:8000/api/products/')
     const data = await response.json()
-    products.value = data
-    filteredProducts.value = data
-    const categories = data.map((product) => product.category)
+    console.log('Fetched products:', data.products)
+    products.value = data.products
+    filteredProducts.value = data.products
+    const categories = data.products.map((product) => product.category) || []
     uniqueCategories.value = ['All', ...new Set(categories)]
   } catch (error) {
     console.error('Error fetching products:', error)
@@ -72,7 +73,12 @@ onMounted(() => {
         @toggleSidebar="toggleSidebar"
       />
       <div class="product-grid">
-        <ProductCard v-for="product in paginatedProducts" :key="product.id" :product="product" />
+        <ProductCard
+          v-for="product in paginatedProducts"
+          :key="product.id"
+          :product="product"
+          @addToCart="addToCart"
+        />
       </div>
       <div class="pagination">
         <button :disabled="currentPage === 1" @click="currentPage--">Previous</button>
