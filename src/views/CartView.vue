@@ -6,16 +6,12 @@ const isPaymentFormOpen = ref(false)
 const togglePaymentForm = () => {
   isPaymentFormOpen.value = true
 }
-const fetchProducts = async () => {
-  try {
-    const response = await fetch('/products.json')
-    const data = await response.json()
-    products.value = data.slice(0, 5) // Display only the first 5 products
-  } catch (error) {
-    console.error('Error fetching products:', error)
-  }
-}
 
+//get cart items from local storage
+const fetchProducts = () => {
+  const cart = JSON.parse(localStorage.getItem('cart')) || []
+  products.value = cart
+}
 onMounted(() => {
   fetchProducts()
 })
