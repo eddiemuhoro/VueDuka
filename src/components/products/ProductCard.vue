@@ -7,6 +7,12 @@ const props = defineProps({
   },
 })
 
+const cart = ref(JSON.parse(localStorage.getItem('cart')) || [])
+
+const isInCart = computed(() => {
+  return cart.value.some((item) => item.id === props.product.id)
+})
+
 const addToCart = (product) => {
   //add item clicked to local storage
   const cart = JSON.parse(localStorage.getItem('cart')) || []
@@ -18,6 +24,10 @@ const addToCart = (product) => {
   }
   localStorage.setItem('cart', JSON.stringify(cart))
   console.log('Product added to cart:', product)
+  window.dispatchEvent(new Event('cart-updated'))
+  alert('Product added to cart successfully!')
+  // Emit an event to notify parent component if needed
+  // emit('productAdded', product)
 }
 </script>
 
@@ -31,7 +41,9 @@ const addToCart = (product) => {
     <div class="product-details">
       <h2 class="product-title">{{ product.name }}</h2>
       <p class="product-price">Ksh{{ product.price.toFixed(2) }}</p>
-      <button @click="addToCart(product)" class="btn btn-primary">+</button>
+      <button @click="addToCart(product)" class="btn btn-primary" :disabled="isInCart">
+        {{ isInCart ? 'In Cart' : '+' }}
+      </button>
     </div>
   </div>
 </template>

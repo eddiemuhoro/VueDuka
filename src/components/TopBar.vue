@@ -1,14 +1,26 @@
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
-import { useRouter } from 'vue-router'
 
-const router = useRouter()
+const cartCount = ref(0)
 
-//cart count from local storage
-const cartCount = () => {
+function updateCartCount() {
   const cart = JSON.parse(localStorage.getItem('cart')) || []
-  return cart.length
+  cartCount.value = cart.length
 }
+
+function handleCartUpdated() {
+  updateCartCount()
+}
+
+onMounted(() => {
+  updateCartCount()
+  window.addEventListener('cart-updated', handleCartUpdated)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('cart-updated', handleCartUpdated)
+})
 </script>
 
 <template>
@@ -25,7 +37,7 @@ const cartCount = () => {
         <li>
           <RouterLink to="/cart">
             <i class="pi pi-shopping-cart"></i>
-            <span class="cart-count">{{ cartCount() }}</span>
+            <span class="cart-count">{{ cartCount }}</span>
           </RouterLink>
         </li>
         <li>

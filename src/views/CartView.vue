@@ -7,7 +7,6 @@ const togglePaymentForm = () => {
   isPaymentFormOpen.value = true
 }
 
-//get cart items from local storage
 const fetchProducts = () => {
   const cart = JSON.parse(localStorage.getItem('cart')) || []
   products.value = cart
@@ -17,11 +16,30 @@ onMounted(() => {
 })
 
 const totalPrice = computed(() => {
-  return products.value.reduce((total, product) => total + product.price, 0)
+  return products.value.reduce(
+    (total, product) => total + product.price * (product.quantity || 1),
+    0,
+  )
 })
 
 const removeFromCart = (index) => {
   products.value.splice(index, 1)
+  localStorage.setItem('cart', JSON.stringify(products.value))
+  window.dispatchEvent(new Event('cart-updated'))
+}
+
+const increaseQuantity = (index) => {
+  products.value[index].quantity = (products.value[index].quantity || 1) + 1
+  localStorage.setItem('cart', JSON.stringify(products.value))
+  window.dispatchEvent(new Event('cart-updated'))
+}
+
+const decreaseQuantity = (index) => {
+  if (products.value[index].quantity > 1) {
+    products.value[index].quantity -= 1
+    localStorage.setItem('cart', JSON.stringify(products.value))
+    window.dispatchEvent(new Event('cart-updated'))
+  }
 }
 </script>
 <template>
@@ -34,8 +52,13 @@ const removeFromCart = (index) => {
             <img :src="`https://picsum.photos/200/200?random=${product.id}`" alt="Product Image" />
           </div>
           <div class="item-details">
-            <span class="item-name">{{ product.title }}</span>
+            <span class="item-name">{{ product.name }}</span>
             <span class="item-price">{{ product.price }} Ksh</span>
+            <div class="quantity-controls">
+              <button @click="decreaseQuantity(index)">−</button>
+              <span class="quantity">{{ product.quantity }}</span>
+              <button @click="increaseQuantity(index)">+</button>
+            </div>
           </div>
         </section>
         <button class="remove-button" @click="removeFromCart(index)">Remove</button>
@@ -128,6 +151,31 @@ const removeFromCart = (index) => {
 
 .remove-button:hover {
   background-color: #c0392b;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 5px;
+}
+.quantity-controls button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: #eee;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.quantity-controls button:hover {
+  background: #ddd;
+}
+.quantity {
+  min-width: 24px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .cart-total {
