@@ -6,6 +6,19 @@ const props = defineProps({
     required: true,
   },
 })
+
+const addToCart = (product) => {
+  //add item clicked to local storage
+  const cart = JSON.parse(localStorage.getItem('cart')) || []
+  const existingProduct = cart.find((item) => item.id === product.id)
+  if (existingProduct) {
+    existingProduct.quantity += 1
+  } else {
+    cart.push({ ...product, quantity: 1 })
+  }
+  localStorage.setItem('cart', JSON.stringify(cart))
+  console.log('Product added to cart:', product)
+}
 </script>
 
 <template>
@@ -16,8 +29,9 @@ const props = defineProps({
       class="product-image"
     />
     <div class="product-details">
-      <h2 class="product-title">{{ product.title }}</h2>
+      <h2 class="product-title">{{ product.name }}</h2>
       <p class="product-price">Ksh{{ product.price.toFixed(2) }}</p>
+      <button @click="addToCart(product)" class="btn btn-primary">+</button>
     </div>
   </div>
 </template>
@@ -46,6 +60,17 @@ const props = defineProps({
   font-size: 13px;
   font-weight: 600;
 }
+
+.product-card:hover {
+  background-color: var(--color-background);
+}
+
+.btn-primary {
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
 @media (max-width: 1120px) {
   .product-card {
     width: 150px;
